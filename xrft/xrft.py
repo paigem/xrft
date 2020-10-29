@@ -139,7 +139,11 @@ def _apply_detrend(da, dim, axis_num, detrend_type):
 
     elif detrend_type == 'linear':
         if len(dim) == 1:
-            p = da.polyfit(dim=dim[0], deg=1)
+            dims_to_rechunk = [d for d in da.dims]
+            dims_to_rechunk.remove(dim[0])
+            p = da.polyfit(dim=dim[0], deg=1).chunk({dims_to_rechunk[0]:da.chunks[da.get_axis_num(dims_to_rechunk[0])][0],
+                                                     dims_to_rechunk[1]:da.chunks[da.get_axis_num(dims_to_rechunk[1])][0]})
+            print(p.chunks)
             linear_fit = xr.polyval(da[dim[0]], p.polyfit_coefficients)
             return da - linear_fit
 
@@ -382,6 +386,7 @@ def dft(da, spacing_tol=1e-3, dim=None, real=None, shift=True, detrend=None,
 
     if detrend:
         da = _apply_detrend(da, dim, axis_num, detrend)
+        print(da.chunks)
 
     if window:
         da = _apply_window(da, dim)

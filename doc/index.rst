@@ -31,13 +31,16 @@ Documentation
    why-xrft
    limitations
    installation
+   contributor_guide
 
 .. toctree::
    :maxdepth: 1
    :caption: Examples
 
-   MITgcm_example
+   DFT-iDFT_example
+   Parseval_example
    chunk_example
+   MITgcm_example
 
 .. toctree::
    :maxdepth: 1
